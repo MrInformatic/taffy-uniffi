@@ -1,0 +1,465 @@
+namespace taffy {
+       
+};
+
+[Error]
+interface TaffyError {
+    Poison();
+    ChildIndexOutOfBounds(NodeId parent, u64 child_index, u64 child_count);
+    InvalidParentNode(NodeId node_id);
+    InvalidChildNode(NodeId node_id);
+    InvalidInputNode(NodeId node_id);
+};
+
+[Custom]
+typedef u64 NodeId;
+
+interface TaffyTree {
+    constructor();
+
+    [Name=with_capacity]
+    constructor(u64 capacity);
+
+    [Throws=TaffyError]
+    void enable_rounding();
+
+    [Throws=TaffyError]
+    void disable_rounding();
+
+    [Throws=TaffyError]
+    NodeId new_leaf(Style layout);
+
+    [Throws=TaffyError]
+    NodeId new_leaf_with_context(Style layout);
+
+    [Throws=TaffyError]
+    NodeId new_with_children(Style layout, sequence<NodeId> children);
+
+    [Throws=TaffyError]
+    void clear();
+
+    [Throws=TaffyError]
+    NodeId remove(NodeId node);
+
+    [Throws=TaffyError]
+    void set_node_context(NodeId node);
+
+    [Throws=TaffyError]
+    void get_node_context(NodeId node);
+
+    [Throws=TaffyError]
+    void insert_child_at_index(NodeId parent, u64 child_index, NodeId child);
+
+    [Throws=TaffyError]
+    void set_children(NodeId parent, sequence<NodeId> children);
+
+    [Throws=TaffyError]
+    NodeId remove_child(NodeId parent, NodeId child);
+
+    [Throws=TaffyError]
+    NodeId remove_child_at_index(NodeId parent, u64 child_index);
+
+    [Throws=TaffyError]
+    NodeId replace_child_at_index(NodeId parent, u64 child_index, NodeId new_child);
+
+    [Throws=TaffyError]
+    NodeId get_child_at_index(NodeId parent, u64 child_index);
+
+    [Throws=TaffyError]
+    u64 get_total_node_count();
+
+    [Throws=TaffyError]
+    NodeId? get_parent(NodeId child_id);
+
+    [Throws=TaffyError]
+    sequence<NodeId> get_children(NodeId parent);
+
+    [Throws=TaffyError]
+    void set_style(NodeId node, Style style);
+
+    [Throws=TaffyError]
+    Style get_style(NodeId node);
+
+    [Throws=TaffyError]
+    Layout get_layout(NodeId node);
+
+    [Throws=TaffyError]
+    void mark_dirty(NodeId node);
+
+    [Throws=TaffyError]
+    boolean is_dirty(NodeId node);
+
+    [Throws=TaffyError]
+    void compute_layout_with_measure(NodeId node_id, SizeAvailableSpace available_space, MeasureFunction measure_function);
+
+    [Throws=TaffyError]
+    void compute_layout(NodeId node, SizeAvailableSpace available_space);
+
+    [Throws=TaffyError]
+    void print_tree(NodeId root);
+};
+
+callback interface MeasureFunction {
+    SizeFloat measure(SizeOptionFloat known_size, SizeAvailableSpace avaliable_space, NodeId node);
+};
+
+interface Style {
+    constructor();
+
+    [Throws=TaffyError]
+    Display get_display();
+    [Throws=TaffyError]
+    void set_display(Display value);
+    
+    [Throws=TaffyError]
+    PointOverflow get_overflow();
+    [Throws=TaffyError]
+    void set_overflow(PointOverflow value);
+    
+    [Throws=TaffyError]
+    float get_scrollbar_width();
+    [Throws=TaffyError]
+    void set_scrollbar_width(float value);
+    
+    [Throws=TaffyError]
+    Position get_position();
+    [Throws=TaffyError]
+    void set_position(Position value);
+    
+    [Throws=TaffyError]
+    RectLengthPercentageAuto get_inset();
+    [Throws=TaffyError]
+    void set_inset(RectLengthPercentageAuto value);
+    
+    [Throws=TaffyError]
+    SizeDimension get_size();
+    [Throws=TaffyError]
+    void set_size(SizeDimension value);
+    
+    [Throws=TaffyError]
+    SizeDimension get_min_size();
+    [Throws=TaffyError]
+    void set_min_size(SizeDimension value);
+    
+    [Throws=TaffyError]
+    SizeDimension get_max_size();
+    [Throws=TaffyError]
+    void set_max_size(SizeDimension value);
+    
+    [Throws=TaffyError]
+    float? get_aspect_ratio();
+    [Throws=TaffyError]
+    void set_aspect_ratio(float? value);
+    
+    [Throws=TaffyError]
+    RectLengthPercentageAuto get_margin();
+    [Throws=TaffyError]
+    void set_margin(RectLengthPercentageAuto value);
+    
+    [Throws=TaffyError]
+    RectLengthPercentage get_padding();
+    [Throws=TaffyError]
+    void set_padding(RectLengthPercentage value);
+    
+    [Throws=TaffyError]
+    RectLengthPercentage get_border();
+    [Throws=TaffyError]
+    void set_border(RectLengthPercentage value);
+    
+    [Throws=TaffyError]
+    AlignItems? get_align_items();
+    [Throws=TaffyError]
+    void set_align_items(AlignItems? value);
+    
+    [Throws=TaffyError]
+    AlignItems? get_align_self();
+    [Throws=TaffyError]
+    void set_align_self(AlignItems? value);
+    
+    [Throws=TaffyError]
+    AlignItems? get_justify_items();
+    [Throws=TaffyError]
+    void set_justify_items(AlignItems? value);
+    
+    [Throws=TaffyError]
+    AlignItems? get_justify_self();
+    [Throws=TaffyError]
+    void set_justify_self(AlignItems? value);
+    
+    [Throws=TaffyError]
+    AlignContent? get_align_content();
+    [Throws=TaffyError]
+    void set_align_content(AlignContent? value);
+    
+    [Throws=TaffyError]
+    AlignContent? get_justify_content();
+    [Throws=TaffyError]
+    void set_justify_content(AlignContent? value);
+    
+    [Throws=TaffyError]
+    SizeLengthPercentage get_gap();
+    [Throws=TaffyError]
+    void set_gap(SizeLengthPercentage value);
+    
+    [Throws=TaffyError]
+    FlexDirection get_flex_direction();
+    [Throws=TaffyError]
+    void set_flex_direction(FlexDirection value);
+    
+    [Throws=TaffyError]
+    FlexWrap get_flex_wrap();
+    [Throws=TaffyError]
+    void set_flex_wrap(FlexWrap value);
+    
+    [Throws=TaffyError]
+    Dimension get_flex_basis();
+    [Throws=TaffyError]
+    void set_flex_basis(Dimension value);
+    
+    [Throws=TaffyError]
+    float get_flex_grow();
+    [Throws=TaffyError]
+    void set_flex_grow(float value);
+    
+    [Throws=TaffyError]
+    float get_flex_shrink();
+    [Throws=TaffyError]
+    void set_flex_shrink(float value);
+    
+    [Throws=TaffyError]
+    sequence<TrackSizingFunction> get_grid_template_rows();
+    [Throws=TaffyError]
+    void set_grid_template_rows(sequence<TrackSizingFunction> value);
+    
+    [Throws=TaffyError]
+    sequence<TrackSizingFunction> get_grid_template_columns();
+    [Throws=TaffyError]
+    void set_grid_template_columns(sequence<TrackSizingFunction> value);
+    
+    [Throws=TaffyError]
+    sequence<NonRepeatedTrackSizingFunction> get_grid_auto_rows();
+    [Throws=TaffyError]
+    void set_grid_auto_rows(sequence<NonRepeatedTrackSizingFunction> value);
+    
+    [Throws=TaffyError]
+    sequence<NonRepeatedTrackSizingFunction> get_grid_auto_columns();
+    [Throws=TaffyError]
+    void set_grid_auto_columns(sequence<NonRepeatedTrackSizingFunction> value);
+    
+    [Throws=TaffyError]
+    GridAutoFlow get_grid_auto_flow();
+    [Throws=TaffyError]
+    void set_grid_auto_flow(GridAutoFlow value);
+    
+    [Throws=TaffyError]
+    LineGridPlacement get_grid_row();
+    [Throws=TaffyError]
+    void set_grid_row(LineGridPlacement value);
+    
+    [Throws=TaffyError]
+    LineGridPlacement get_grid_column();
+    [Throws=TaffyError]
+    void set_grid_column(LineGridPlacement value);
+};
+
+enum Display {
+    "Block",
+    "Flex",
+    "Grid",
+    "None",
+};
+
+enum Overflow {
+    "Visible",
+    "Clip",
+    "Hidden",
+    "Scroll",
+};
+
+enum Position {
+    "Relative",
+    "Absolute",
+};
+
+enum AlignItems {
+    "Start",
+    "End",
+    "FlexStart",
+    "FlexEnd",
+    "Center",
+    "Baseline",
+    "Stretch",
+};
+
+enum AlignContent {
+    "Start",
+    "End",
+    "FlexStart",
+    "FlexEnd",
+    "Center",
+    "Stretch",
+    "SpaceBetween",
+    "SpaceEvenly",
+    "SpaceAround",
+};
+
+enum FlexDirection {
+    "Row",
+    "Column",
+    "RowReverse",
+    "ColumnReverse",
+};
+
+enum FlexWrap {
+    "NoWrap",
+    "Wrap",
+    "WrapReverse",
+};
+
+enum GridAutoFlow {
+    "Row",
+    "Column",
+    "RowDense",
+    "ColumnDense",
+};
+
+[Enum]
+interface LengthPercentageAuto {
+    Length(float value);
+    Percent(float value);
+    Auto();
+};
+
+[Enum]
+interface Dimension {
+    Length(float value);
+    Percent(float value);
+    Auto();
+};
+
+[Enum]
+interface LengthPercentage {
+    Length(float value);
+    Percent(float value);
+};
+
+[Enum]
+interface TrackSizingFunction {
+    Single(NonRepeatedTrackSizingFunction func);
+    Repeat(GridTrackRepetition rep, sequence<NonRepeatedTrackSizingFunction> funcs);
+};
+
+[Enum]
+interface GridPlacement {
+    Line(i16 index);
+    Span(u16 span);
+    Auto();
+};
+
+[Enum]
+interface MinTrackSizingFunction {
+    Fixed(LengthPercentage value);
+    MinContent();
+    MaxContent();
+    Auto();
+};
+
+[Enum]
+interface GridTrackRepetition {
+    AutoFill();
+    AutoFit();
+    Count(u16 value);
+};
+
+[Enum]
+interface MaxTrackSizingFunction {
+    Fixed(LengthPercentage value);
+    MinContent();
+    MaxContent();
+    FitContent(LengthPercentage value);
+    Auto();
+    Fraction(float value);
+};
+
+[Enum]
+interface AvailableSpace {
+    Definite(float value);
+    MinContent();
+    MaxContent();
+};
+
+dictionary NonRepeatedTrackSizingFunction {
+    MinTrackSizingFunction min;
+    MaxTrackSizingFunction max;
+};
+
+dictionary PointOverflow {
+    Overflow x;
+    Overflow y;
+};
+
+dictionary RectLengthPercentageAuto {
+    LengthPercentageAuto top;
+    LengthPercentageAuto bottom;
+    LengthPercentageAuto left;
+    LengthPercentageAuto right;
+};
+
+dictionary SizeDimension {
+    Dimension width;
+    Dimension height;
+};
+
+dictionary RectLengthPercentage {
+    LengthPercentage top;
+    LengthPercentage bottom;
+    LengthPercentage left;
+    LengthPercentage right;
+};
+
+dictionary SizeLengthPercentage {
+    LengthPercentage width;
+    LengthPercentage height;
+};
+
+dictionary LineGridPlacement {
+    GridPlacement start;
+    GridPlacement end;
+};
+
+dictionary SizeAvailableSpace {
+    AvailableSpace width;
+    AvailableSpace height;
+};
+
+dictionary SizeOptionFloat {
+    float? width;
+    float? height;
+};
+
+dictionary Layout {
+    u32 order;
+    PointFloat location;
+    SizeFloat size;
+    SizeFloat content_size;
+    SizeFloat scrollbar_size;
+    RectFloat border;
+    RectFloat padding;
+};
+
+dictionary PointFloat {
+    float x;
+    float y;
+};
+
+dictionary SizeFloat {
+    float width;
+    float height;
+};
+
+dictionary RectFloat {
+    float left;
+    float right;
+    float top;
+    float bottom;
+};
