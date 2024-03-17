@@ -1,4 +1,7 @@
 /target
 .idea/
-bindings/cs/bin/
-bindings/cs/obj/
+
+# C#
+/bindings/cs/bin/
+/bindings/cs/obj/
+/bindings/cs/taffy.cs
